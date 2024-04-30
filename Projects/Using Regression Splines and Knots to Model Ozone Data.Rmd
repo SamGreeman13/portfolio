@@ -2,7 +2,7 @@
 title: "Using Regression Splines and Knots to Model Ozone Data"
 author: "Samuel Greeman"
 date: '2021-03-30'
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
