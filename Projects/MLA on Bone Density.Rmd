@@ -2,7 +2,7 @@
 title: "Machine Learning Analysis on Bone Density"
 author: "Samuel Greeman"
 date: '2021-04-12'
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
