@@ -14,52 +14,16 @@ y <- bone$spnbmd
 library("tidyverse")
 ```
 
-    ## Warning: replacing previous import 'lifecycle::last_warnings' by
-    ## 'rlang::last_warnings' when loading 'tibble'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_unnamed' by
-    ## 'rlang::check_dots_unnamed' when loading 'tibble'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_used' by
-    ## 'rlang::check_dots_used' when loading 'tibble'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_empty' by
-    ## 'rlang::check_dots_empty' when loading 'tibble'
-
-    ## Warning: replacing previous import 'lifecycle::last_warnings' by
-    ## 'rlang::last_warnings' when loading 'pillar'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_unnamed' by
-    ## 'rlang::check_dots_unnamed' when loading 'pillar'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_used' by
-    ## 'rlang::check_dots_used' when loading 'pillar'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_empty' by
-    ## 'rlang::check_dots_empty' when loading 'pillar'
-
-    ## Warning: replacing previous import 'lifecycle::last_warnings' by
-    ## 'rlang::last_warnings' when loading 'hms'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_unnamed' by
-    ## 'rlang::check_dots_unnamed' when loading 'hms'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_used' by
-    ## 'rlang::check_dots_used' when loading 'hms'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_empty' by
-    ## 'rlang::check_dots_empty' when loading 'hms'
-
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
-
-    ## v ggplot2 3.3.3     v purrr   0.3.4
-    ## v tibble  3.1.0     v dplyr   1.0.5
-    ## v tidyr   1.1.3     v stringr 1.4.0
-    ## v readr   1.4.0     v forcats 0.5.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.0.2     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ``` r
 plot(x, y, col="gray", main="Bone Data")
@@ -88,7 +52,7 @@ crossval.lg <- ls[which.min(crossval.gs)]
 crossval.lg
 ```
 
-    ## [1] 0.0074
+    ## [1] 0
 
 We set our initial lambda value equal to 0.01, but we want to use the
 Generalized Cross Validation method to verify what the optimal value of
@@ -268,7 +232,7 @@ f.pred.lg <- smooth.spline(x, y, lambda=crossval.lg, cv=F)
 f.pred.lg$cv.crit
 ```
 
-    ## [1] 0.00167295
+    ## [1] 0.002239606
 
 ``` r
 l.bs <- crossval.total/100

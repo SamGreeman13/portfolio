@@ -27,42 +27,6 @@ library(ggpubr)
 
     ## Loading required package: ggplot2
 
-    ## Warning: replacing previous import 'lifecycle::last_warnings' by
-    ## 'rlang::last_warnings' when loading 'tibble'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_unnamed' by
-    ## 'rlang::check_dots_unnamed' when loading 'tibble'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_used' by
-    ## 'rlang::check_dots_used' when loading 'tibble'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_empty' by
-    ## 'rlang::check_dots_empty' when loading 'tibble'
-
-    ## Warning: replacing previous import 'lifecycle::last_warnings' by
-    ## 'rlang::last_warnings' when loading 'pillar'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_unnamed' by
-    ## 'rlang::check_dots_unnamed' when loading 'pillar'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_used' by
-    ## 'rlang::check_dots_used' when loading 'pillar'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_empty' by
-    ## 'rlang::check_dots_empty' when loading 'pillar'
-
-    ## Warning: replacing previous import 'lifecycle::last_warnings' by
-    ## 'rlang::last_warnings' when loading 'hms'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_unnamed' by
-    ## 'rlang::check_dots_unnamed' when loading 'hms'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_used' by
-    ## 'rlang::check_dots_used' when loading 'hms'
-
-    ## Warning: replacing previous import 'ellipsis::check_dots_empty' by
-    ## 'rlang::check_dots_empty' when loading 'hms'
-
 ``` r
 ggqqplot(data)
 ```
@@ -129,8 +93,6 @@ Our final test is the Jarque-Bera Test. \## Jarque-Bera Test
 ``` r
 library(tseries)
 ```
-
-    ## Warning: package 'tseries' was built under R version 4.0.5
 
     ## Registered S3 method overwritten by 'quantmod':
     ##   method            from
