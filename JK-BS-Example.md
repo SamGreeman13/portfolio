@@ -120,8 +120,8 @@ boot_results
     ## 
     ## 
     ## Bootstrap Statistics :
-    ##      original        bias    std. error
-    ## t1* 0.6174493 -2.648309e-05  0.03952126
+    ##      original     bias    std. error
+    ## t1* 0.6174493 0.00271059  0.03906649
 
 As you can see, this method gives us a very precise estimate of all of
 our metrics.
