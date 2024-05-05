@@ -1,0 +1,129 @@
+\documentclass[12pt]{article}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+
+
+
+\geometry{hmargin={2cm,0.8in},height=8in}
+\geometry{height=10in}
+
+\usepackage{paralist}
+\usepackage{enumerate}
+\usepackage{amsfonts}
+\usepackage{verbatim}
+
+
+
+\pagestyle{empty}
+
+
+\setlength{\parindent}{0pt}
+
+\newcommand{\ds}{\displaystyle}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\La}{\Leftarrow}
+\doublespacing
+\title{Outlining the Pros and Cons of Bootstrap and Jackknife Methods}
+\author{Samuel Greeman}
+\date{}
+\begin{document}
+\maketitle
+\begin{flushleft}
+
+
+
+
+\setdefaultleftmargin{0pt}{}{}{}{}{}
+
+
+
+
+Designed to help with estimation of standard errors, and then using those standard errors to construct confidence intervals, both the bootstrap and jackknife have their own strengths and weaknesses, as I will outline in the paper. When used in combination, they can benefit from each other and benefit the statistician if they are used properly.\\
+
+\section{Intro to the Bootstrap and Jackknife}\label{sec:intro}
+The bootstrap and jackknife are, let's say, unique names for any sort of statistical jargon. Most tests and statistics are named after their inventors, such as Tukey tests, or Greek letters, such as chi-squared, so the bootstrap and jackknife seem niche, but are in fact incredibly useful.\\
+
+\section{Jackknife}\label{sec:chapter}
+\textbf{Background}\\
+Jackknife resampling was created in 1949 by English professor Maurice Quenouille, and is named 'jackknife' due to its usefulness in many different situations. Others have called it Swiss-army resampling.\\
+\textbf{Motivation}\\
+The main function it serves is to provide an rough albeit easy estimation for variance and bias of a given estimator.\\
+\textbf{Procedures}\\
+In order to use this method, we first must lay the land:\\
+- Let \(\theta\) be any statistic.\\
+- \(T_n\) is our estimator for \(\theta\).\\
+- Our bias is denoted as bias\((T_n)\) and is equal to \(E[T_n] - \theta\).\\
+- Let \(\bar{T_n} = \frac{1}{n}\sum{T_{(-i)}}\) where \(T_{(-i)}\) is our statistic \(T\) without the i'th point.\\
+Then, we have the jackknife bias as \(b_{jack} = (n - 1)(\bar{T_n} - T_n)\)\\
+We correct the bias of our estimator by creating a new estimator, \(T_{jack} = T_n - b_{jack}\).\\
+If we want the variance of our estimator, \(T_n\), we get the following:\\
+\(Var(T_n) = \frac{\tilde{s}^2}{n}\) where \(\tilde{s}^2\) is our sample variance of pseudovalues (we will address this soon), equal to \(\frac{\sum_{i=1}^{n}{(\tilde{T_i} - \frac{1}{n}\sum_{i=1}^{n}{\tilde{T_i}}}^2}{n - 1}\)\\
+\(\tilde{T_i}\) are psuedovalues, calculated as:\\
+\(\tilde{T_i} = T_nn - T_{(-i)}(n - 1)\)\\.
+
+\section{Bootstrap}\label{sec:chapter}
+\textbf{Background}\\
+Bootstrapping is considered an alteration to the jackknife method. Bootstrapping is a general term in statistics for sampling with replacement, a concept that is rudimentary for most statisticians. The method was created in 1979 by Bradley Efron, who continued to work on it for almost 10 years after.\\
+\textbf{Motivation}\\
+Bootstrapping is useful for creating confidence intervals and estimating distributions of an estimator, \(T_n\).\\
+\textbf{Procedures}\\
+Bootstrapping is executed by simulating data as follows:\\
+- Sample \(X^*_1, X^*_2, X^*_3,..., X^*_n \sim \hat{F_n}\)\\
+- Calculate \(T^*_n = g(X^*_{1:n})\)\\
+- Repeat the above steps a total of \(B\) times\\
+- You can now calculate the variance as follows:\\
+\(Var_{boot} = \frac{1}{B}\sum_{b=1}^{B}({T^*_{n, b} - \frac{1}{B}\sum_{r=1}^{b}{T^*_{n, r}}})^2\)\\
+We are also able to say that \(Var_{boot} \rightarrow^{LLN} Var(T_n)\), almost surely.\\
+
+\section{Similarities and Differences}\label{sec:chapter}
+\textbf{Bootstrapping Pros and Cons}\\
+There are more differences than similarities between bootstrapping and jackknifing when you look beyond the surface. Bootstrapping is very exhaustive and time-consuming, as you have to simulate data in order to accomplish your goal, but with this comes higher accuracy when estimating variance, and you can also take the square root of the bootstrap variance to get standard error, which is useful for constructing confidence intervals. Not only that, but with more calculation, bootstrapping can help you get the distribution for your estimator.\\
+\textbf{Jackknife Pros and Cons}\\
+Contrary to bootstrapping, jacknife resampling is easy, and requires few calculations, and little background knowledge to use. However, this also means that the calculations may not be as precise as is necessary, but since jackknife is usually used for estimating bias and variance, two descriptive statistics that are more ambiguous figures anyway, so high levels of precision are not often needed.
+\centerline{\includegraphics{JK BS Example p1.pdf}}
+\centerline{\includegraphics{JK BS Example p2.pdf}}
+\centerline{\includegraphics{JK BS Example p3.pdf}}
+
+
+\section{Conclusion}\label{sec:chapter}
+Judging from our two examples, while it may seem that the information we found is not actionable, it is actually the opposite. If we find out that our estimators ARE biased, then it is bad, but since we found little bias in both of our datasets and examples, it gives us confidence that our estimators will hold up well, which is really how these two methods are used.\\
+
+
+
+\textbf{References}\\
+- “HOME.” IDRE Stats, UCLA, stats.idre.ucla.edu/r/faq/how-can-i-generate-bootstrap-statistics-in-r/.\\
+- “Resampling Methods: The Jackknife.” Montana State University.\\
+- Lecture Notes\\
+- Efron, Bradley. The Jackknife, the Bootstrap and Other Resampling Plans. Society for Industrial and Applied Mathematics, 1994. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{flushleft}
+\end{document}
