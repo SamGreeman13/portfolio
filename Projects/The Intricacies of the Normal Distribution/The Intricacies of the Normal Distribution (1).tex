@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+
+\geometry{hmargin={2cm,0.8in},height=8in}
+\geometry{height=10in}
+
+\usepackage{paralist}
+\usepackage{enumerate}
+\usepackage{amsfonts}
+\usepackage{verbatim}
+
+\pagestyle{empty}
+
+
+\setlength{\parindent}{0pt}
+
+\newcommand{\ds}{\displaystyle}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\La}{\Leftarrow}
+\doublespacing
+\title{The Intricacies of the Normal Distribution}
+\author{Samuel Greeman}
+\date{}
+\begin{document}
+\maketitle
+\begin{flushleft}
+
+
+
+
+\setdefaultleftmargin{0pt}{}{}{}{}{}
+The usefulness of normality tests cannot be understated. There are many times as the junior statisticians we are when we are presented with a data set, and asked for, say, a confidence interval, but we can't start right away, since we don't know where this data comes from. In this paper, we will learn how to make sure the data you have comes from a normal distribution.\\
+
+\section{Introduction}\label{sec:intro}
+When assessing normality, there are two typical methods that are useful: graphs, and tests. Much like other hypothesis tests, graphs are helpful for confirming an assumption, but tests are more definitive, and give indisputable results, and we will go over both.\\
+
+
+\section{Techniques for Assessing Normality}\label{sec:chapter}
+\textbf{Normal Probability Plot Method}\\
+The Normal Probability Plot is also known as a QQ Plot, but this QQ Plot is on the Normal distribution. The x-axis of the plot is the sorted values of the sample data, and the y-axis is the z-scores for the values of the data, but it can work vice-versa as well. Typically, if the data follows a Normal distribution, the plotted points will have a linear trend. If the data is not Normal, then the plot will look like something else, often a logarithmic function.\\
+
+
+
+\textbf{Histogram Plot Method}\\
+Histograms are very easy to interpret. They essentially tell you how many points of your data fall into different numerical ranges, with a taller bar corresponding to a higher density of points in that region. If you want to assess normality of a dataset, then you can use histograms. Simply take the histogram of your sample data! If the data is normally distributed, then the histogram will resemble the bell-shaped curve of the normal distribution.\\
+
+\section{Normality Tests}\label{sec:chapter}
+\textbf{Shapiro-Wilk}\\
+The Shapiro-Wilk Test for normality is exceptionally simple, at least once you have the calculation part done. To perform the test, you must calculate a value, \(W\), as follows:\\
+\(W = \frac{(\sum_{i=1}^{n}{a_ix_{(i)}})^2}{\sum_{i=1}^{n}{(x_i - \bar{x})^2}}\)\\
+And the parameters are:\\
+\(a_i = (a_1,...,a_n)\) are constants that are generated from the sample mean, variance, and covariance of a sample of size \(n\) that is normally distributed.\\
+\(x_{(i)} = (x_{(1)},...,x_{(n)})\) is the i'th order statistic of the sample.\\
+\(\bar{x}\) is the sample mean.\\
+\(x_i = (x_i,...,x_n)\) is the i'th point in the sample.\\
+The values of \(a_i\) aren't usually calculated by hand or calculator. These are calculated using software like R. The cutoff value for determining normality is defined case-by-case, so in the example, we will show how to use the value.\\
+
+\textbf{Anderson-Darling}\\
+Weird theme of having 2 names in each test, as we see the Anderson-Darling test here. In this case, the statistic is even harder to calculate:\\
+
+\(AD = -n - \frac{1}{n}\ds \sum_{i=1}^{n}{(2i - 1)(ln(F(X_i) + ln(1 - F(X_{n - i + 1}))}\)\\
+Our parameters are as follows:\\
+\(n\) is the sample size.\\
+\(F(X_i)\) is the cumulative distribution function for the normal distribution.\\
+An important note is that in this case, the data need to be ordered, so the \(i = 1\) observation is the smallest.\\
+Even more tediously, computing the significance is dependent on the value of \(AD\), so we leave it to R to calculate the associated p-values in our examples.\\
+
+\textbf{Jarque-Bera}\\
+Another test that is only doable with software, the test statistic for the Jarque-Bera Test is computed using the formula:\\
+\(JB = \frac{n}{6}(S^2 + \frac{(K - 3)^2}{4})\)\\
+Our parameters are tricky, and again we use software for their calculations:\\
+\(K\) is the kurtosis of the sample, which we described in the previous project.\\
+\(S\) is the skewness of the sample, which we also touched on previously.\\
+
+\section{Example}\label{sec:chapter}
+Here, we present all of these normality assessments in action with an example data set that I produced.
+\centerline{\includegraphics{Example p1.pdf}}
+\centerline{\includegraphics{Example p2.pdf}}
+\centerline{\includegraphics{Example p3.pdf}}
+\centerline{\includegraphics{Example p4.pdf}}
+
+\section{Conclusion}\label{sec:chapter}
+At the end of the day, it's obvious what we learned: alone, these tests definitely help confirm or subdue doubts about normality a little bit, but the more tests you run, the more evidence you get one way or another because it is highly unlikely that two tests will tell you different things. In essence, the more tests for normality and diagnostics you run, the more confident you will be in your result.
+
+
+\textbf{References}\\
+- R, RStudio\\
+- Notes from my high school AP Statistics course
+
+\end{flushleft}
+\end{document}
