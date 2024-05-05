@@ -1,7 +1,7 @@
 ---
 title: "Example"
 author: "Samuel Greeman"
-output: github_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
