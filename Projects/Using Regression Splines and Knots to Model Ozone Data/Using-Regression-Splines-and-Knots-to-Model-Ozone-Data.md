@@ -1,16 +1,6 @@
 Using Regression Splines and Knots to Model Ozone Data
 ================
 Samuel Greeman
-2021-03-30
-
-``` r
-rm(list = ls())
-library("splines")
-ozone.data <- read.table("https://web.stanford.edu/~hastie/ElemStatLearn/datasets/ozone.data", header=TRUE)
-```
-
-Here, all we are doing is loading the package “splines” which has many
-functions that will be useful when creating our models.
 
 ## Part A
 
@@ -18,12 +8,6 @@ functions that will be useful when creating our models.
 get.knots <- function(x, basis.knots=c(0.25, 0.5, 0.75)){
   return(quantile(x, probs=basis.knots))
 }
-```
-
-This function will generate knots based on our input at the 25th
-percentile, 50th percentile, and 75th percentile of the data.
-
-``` r
 get.basis <- function(x, knots, intercept.index = FALSE){
   basis <- t(apply(matrix(x, ncol=1), 1, function(x){(x - knots)*((x - knots)>0)}))
   basis <- cbind(x, x^2, x^3, basis^3)
@@ -32,24 +16,22 @@ get.basis <- function(x, knots, intercept.index = FALSE){
   }
   return(basis)
 }
-```
-
-The basis function will get the a basis for our data based on our knots,
-and it will be made up of polynomials in the 1st, 2nd and 3rd degree, as
-well as cubic splines generated at the knots we created in the previous
-part. We have the intercept vector of 1’s not included since it causes
-the predictors in our basis functions to be linear combinations of each
-other. By removing the vector of 1’s, we try to eliminate linear
-dependence.
-
-``` r
 get.range <- function(x){
   return(seq(min(x), max(x), 1))
 }
 ```
 
-This is simply a simulation of data that range from the minimum value of
-our parameters to the maximum value.
+Included in the R code above is the function we used that will generate
+knots based on our input at the 25th percentile, 50th percentile, and
+75th percentile of the data.Similarly, the basis function will get the a
+basis for our data based on our knots, and it will be made up of
+polynomials in the 1st, 2nd and 3rd degree, as well as cubic splines
+generated at the knots we created in the previous part. We have the
+intercept vector of 1’s not included since it causes the predictors in
+our basis functions to be linear combinations of each other. By removing
+the vector of 1’s, we try to eliminate linear dependence. We then run a
+simulation of data that range from the minimum value of our parameters
+to the maximum value.
 
 ``` r
 reg.splines <- function(x, y_in, name){
@@ -66,73 +48,38 @@ reg.splines <- function(x, y_in, name){
 ```
 
 Now that we have created our functions for getting knots and a basis
-from the knots, we can create the splines. This function will start by
-taking x and y_in where y_in is the ozone value in the dataset and x
-will be the bases formed from the knots created by our get.knots
+from the knots, we can create the splines. The function we use in R will
+start by taking x and y_in where y_in is the ozone value in the dataset
+and x will be the bases formed from the knots created by our get.knots
 function. The new.x corresponds to our get.range function that
 effectively simulates data from a given parameter, and this will be used
 when we are doing predictive analysis. Our basis.model is just a
 standard linear regression model with y being predicted by the given
 parameters. To make our prediction interval, we generate a new vector
 that holds predicted values, y_predicted. We use the simulated data from
-new.x and use our basis.model to predict the ozone values. The last 3
-lines of code will generate a plot of the data with error bars.
+new.x and use our basis.model to predict the ozone values.
 
-``` r
-y <- ozone.data$ozone
-reg.splines(ozone.data$radiation, y, "Radiation")
-```
+![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20Splines%20plots-1.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20Splines%20plots-2.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20Splines%20plots-3.png)<!-- -->
 
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20Splines%20plots-1.png)<!-- -->
-
-``` r
-reg.splines(ozone.data$temperature, y, "Temperature")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20Splines%20plots-2.png)<!-- -->
-
-``` r
-reg.splines(ozone.data$wind, y, "Wind")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20Splines%20plots-3.png)<!-- -->
 Here are the plots for each variable individually. Notice how the lines
 become unstable toward minimum and maximum x values, something we hope
 to remedy in part b and c. However, next we will combine all of our
 variables into the same model
 
 ``` r
-b.model <- lm(ozone ~ get.basis(radiation, knots=get.knots(radiation)) + get.basis(temperature, knots=get.knots(temperature)) + get.basis(wind, knots=get.knots(wind)), data=ozone.data)
+b.model <- lm(ozone ~ get.basis(radiation, knots=get.knots(radiation)) + 
+                get.basis(temperature, knots=get.knots(temperature)) + 
+                get.basis(wind, knots=get.knots(wind)), data=ozone.data)
 y_hat <- predict(b.model)
 ```
 
-To give a better idea of how well our model works, we make a model with
-all three variables to predict ozone. We also generate a prediction
-vector to see how well the model performs, and we can see the results in
-the plots below.
+To give a better idea of how well our model works, we make a model (code
+seen above) with all three variables to predict ozone. We also generate
+a prediction vector to see how well the model performs, and we can see
+the results in the plots below.
 
-``` r
-reg.plot <- function(x, y, name){
-  y.order <- order(x)
-  plot(x[y.order], y[y.order], xlab=name, ylab="Ozone", main="Regression Splines")
-  lines(x[y.order], y_hat[y.order], lwd=2)
-}
-reg.plot(ozone.data$radiation, y, "Radiation")
-```
+![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20plots-1.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20plots-2.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20plots-3.png)<!-- -->
 
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20plots-1.png)<!-- -->
-
-``` r
-reg.plot(ozone.data$temperature, y, "Temperature")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20plots-2.png)<!-- -->
-
-``` r
-reg.plot(ozone.data$wind, y, "Wind")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20a,%20Regression%20plots-3.png)<!-- -->
 All 3 plots look relatively acceptable, as the only real problems that
 we can see are due to extreme outliers. The graph plots the actual
 values of the data, with the lines corresponding to the predicted values
@@ -170,58 +117,26 @@ fact that natural splines are created and calculated differently, mainly
 in the ways I described. Below are the individual plots for for the
 variables using the natural splines:
 
-``` r
-nat.splines(ozone.data$radiation, y, "Radiation")
-```
+![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20spline%20plots-1.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20spline%20plots-2.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20spline%20plots-3.png)<!-- -->
 
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20spline%20plots-1.png)<!-- -->
-
-``` r
-nat.splines(ozone.data$temperature, y, "Temperature")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20spline%20plots-2.png)<!-- -->
-
-``` r
-nat.splines(ozone.data$wind, y, "Wind")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20spline%20plots-3.png)<!-- -->
 We can see that the wacky and erratic behavior past the boundary is
 remedied, as is the goal of natural splines, and it instead represents a
 linear function past the boundary which, while may be fractionally less
 accurate, it also reminds us that values near and past the boundary are
 less common, so we use natural splines to make it more accurate in the
 middle while losing a bit of accuracy at the boundaries. As with part a,
-we create a model with all 3 variables, and we can’t see much of a
-difference here between natural and regression splines:
+we create a model using the code below with all 3 variables, and we
+can’t see much of a difference here between natural and regression
+splines:
 
 ``` r
-natural.model <- lm(ozone ~ ns(radiation, knots=get.knots(radiation)) + ns(temperature, knots=get.knots(temperature)) + ns(wind, knots=get.knots(wind)), data=ozone.data)
+natural.model <- lm(ozone ~ ns(radiation, knots=get.knots(radiation)) + ns(temperature, 
+                    knots=get.knots(temperature))
+                    + ns(wind, knots=get.knots(wind)), data=ozone.data)
 y_predicted <- predict(natural.model)
-
-nat.plot <- function(x, y, name){
-  y.order <- order(x)
-  plot(x[y.order], y[y.order], xlab=name, ylab="Ozone", main="Natural Splines")
-  lines(x[y.order], y_hat[y.order], lwd=2)
-}
-
-nat.plot(ozone.data$radiation, y, "Radiation")
 ```
 
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20plots-1.png)<!-- -->
-
-``` r
-nat.plot(ozone.data$temperature, y, "Temperature")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20plots-2.png)<!-- -->
-
-``` r
-nat.plot(ozone.data$wind, y, "Wind")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20b,%20Natural%20plots-3.png)<!-- -->
+![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->
 
 ## Part C
 
@@ -236,28 +151,8 @@ easier, and as we look at the plots, we see that the smoothing splines
 model does a great job smoothing out the spikes in the middle of the
 data.
 
-``` r
-smooth.plot <- function(x, y, name){
-  plot(x, y, xlab=name, ylab="Ozone", main="Smoothing Splines")
-  lines(smooth.spline(x, y), lwd=2)
-}
+![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20c,%20smoothing%20plots-1.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20c,%20smoothing%20plots-2.png)<!-- -->![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20c,%20smoothing%20plots-3.png)<!-- -->
 
-smooth.plot(ozone.data$radiation, y, "Radiation")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20c,%20smoothing%20plots-1.png)<!-- -->
-
-``` r
-smooth.plot(ozone.data$temperature, y, "Temperature")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20c,%20smoothing%20plots-2.png)<!-- -->
-
-``` r
-smooth.plot(ozone.data$wind, y, "Wind")
-```
-
-![](Using-Regression-Splines-and-Knots-to-Model-Ozone-Data_files/figure-gfm/part%20c,%20smoothing%20plots-3.png)<!-- -->
 From all three methods, we can summarize our findings on the effect the
 3 variables have on ozone: For radiation, a higher radiation corresponds
 to higher ozone concentration. The downslope at the end is likely due to
