@@ -1,19 +1,14 @@
 JK BS Example
 ================
 Samuel Greeman
-2020-12-11
 
 Since it is hard to manufacture examples of bootstrapping and
 jackknifing, we will be following closely with a jackknifing example
 from the math department at montana.edu and a bootstrapping example from
 ucla.edu, both of which can be found in references. First, we will start
-with the jackknife example: \## Reading in the data
+with the jackknife example:
 
-``` r
-data.X <- c(4.23, 1.30, 0.99, 2.41, 1.87, 3.28, 0.67, 3.12, 0.71, 0.82,
-       0.67, 0.88, 2.14, 0.29, 2.41, 3.09, 1.02, 0.57, 0.46, 1.381, 0.122)
-mean(data.X)
-```
+## Reading in the data
 
     ## [1] 1.544429
 
@@ -95,13 +90,9 @@ UCLA.
 
 ## Read in the data
 
-``` r
-library(boot)
-data.Y <- read.table("https://stats.idre.ucla.edu/stat/data/hsb2.csv", sep=",", header=T)
-```
-
-Next we set our function that we will use to obtain statistics to
-bootstrap. We chose to use correlation as our statistic:
+After we read in the data, we set our function that we will use to
+obtain statistics to bootstrap. We chose to use correlation as our
+statistic:
 
 ``` r
 cor_fun <- function(d, i){
@@ -129,8 +120,8 @@ boot_results
     ## 
     ## 
     ## Bootstrap Statistics :
-    ##      original       bias    std. error
-    ## t1* 0.6174493 -0.002377672  0.03808385
+    ##      original     bias    std. error
+    ## t1* 0.6174493 0.00271059  0.03906649
 
 As you can see, this method gives us a very precise estimate of all of
 our metrics.
